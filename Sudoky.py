@@ -12,7 +12,7 @@ FONT = pygame.font.SysFont("comicsans", 40)
 SMALL_FONT = pygame.font.SysFont("comicsans", 25)
 BACKGROUND_COLOR = (255, 255, 255)
 LINE_COLOR = (0, 0, 0)
-SELECTED_COLOR = (255, 200, 200)  # Нежно-красный цвет для выбранной клетки
+SELECTED_COLOR = (210, 200, 200)  # Нежно-красный цвет для выбранной клетки
 SCORE_FONT = pygame.font.SysFont("comicsans", 30)
 
 # Функция для отрисовки сетки
