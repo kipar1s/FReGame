@@ -23,11 +23,14 @@
 
 1. Скачать и установить необходимое ПО    
 - Python vers 3.13    
-- Pygame (на данную версию)    
-Pygame (https://github.com/pygame/pygame/releases?ysclid=m418ngesaw138386262)
+- Pygame (на данную версию) (pip install pygame) 
+(для уточенения информации https://github.com/pygame/pygame)
 - Visual Studio Code либо любой другой компилятор для Python     
 
+2. Как запустить игру
 
+- Открыть файл с игрой через VS Code или любой другой компилятор
+- python <название_файла>.py
 
 
 ## Планы на будущее
