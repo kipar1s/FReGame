@@ -5,22 +5,21 @@ import random
 pygame.init()
 
 # Константы
-WIDTH, HEIGHT = 540, 540  # Исправлено для корректной сетки
+WIDTH, HEIGHT = 540, 600
 GRID_SIZE = 9
 CELL_SIZE = WIDTH // GRID_SIZE
 FONT = pygame.font.SysFont("comicsans", 40)
 SMALL_FONT = pygame.font.SysFont("comicsans", 25)
 BACKGROUND_COLOR = (255, 255, 255)
 LINE_COLOR = (0, 0, 0)
-SELECTED_COLOR = (173, 216, 230)
-ERROR_COLOR = (255, 0, 0)
+SELECTED_COLOR = (255, 200, 200)  # Нежно-красный цвет для выбранной клетки
 
 # Функция для отрисовки сетки
 def draw_grid(win):
     for i in range(GRID_SIZE + 1):
         line_width = 4 if i % 3 == 0 else 1
         pygame.draw.line(win, LINE_COLOR, (0, i * CELL_SIZE), (WIDTH, i * CELL_SIZE), line_width)
-        pygame.draw.line(win, LINE_COLOR, (i * CELL_SIZE, 0), (i * CELL_SIZE, HEIGHT), line_width)
+        pygame.draw.line(win, LINE_COLOR, (i * CELL_SIZE, 0), (i * CELL_SIZE, WIDTH), line_width)
 
 # Генерация поля Судоку
 def generate_sudoku():
@@ -74,22 +73,25 @@ def solve(grid):
                 return False
     return True
 
-# Отрисовка чисел
-def draw_numbers(win, grid, selected_cell):
+# Отрисовка чисел и подсветки выбранной клетки
+def draw_numbers_and_highlight(win, grid, selected_cell):
+    # Подсветка выбранной клетки
+    if selected_cell:
+        row, col = selected_cell
+        pygame.draw.rect(win, SELECTED_COLOR, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+
+    # Отрисовка чисел
     for row in range(GRID_SIZE):
         for col in range(GRID_SIZE):
             if grid[row][col] != 0:
                 x, y = col * CELL_SIZE + CELL_SIZE // 2, row * CELL_SIZE + CELL_SIZE // 2
-                color = LINE_COLOR
-                if selected_cell == (row, col):
-                    color = SELECTED_COLOR
-                text = FONT.render(str(grid[row][col]), True, color)
+                text = FONT.render(str(grid[row][col]), True, LINE_COLOR)
                 win.blit(text, text.get_rect(center=(x, y)))
 
 # Основная функция
 def main():
     win = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Sudoku")
+    pygame.display.set_caption("Судоку")
     clock = pygame.time.Clock()
 
     grid = generate_sudoku()
@@ -102,7 +104,7 @@ def main():
     while running:
         win.fill(BACKGROUND_COLOR)
         draw_grid(win)
-        draw_numbers(win, grid, selected_cell)
+        draw_numbers_and_highlight(win, grid, selected_cell)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -115,16 +117,34 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if selected_cell and selected_cell not in fixed_cells:
                     row, col = selected_cell
-                    if pygame.K_1 <= event.key <= pygame.K_9:
-                        num = event.key - pygame.K_0
-                        if is_valid(grid, row, col, num):
-                            grid[row][col] = num
-                        else:
-                            print("Некорректный ввод!")
+                    if event.key == pygame.K_1:
+                        grid[row][col] = 1
+                    elif event.key == pygame.K_2:
+                        grid[row][col] = 2
+                    elif event.key == pygame.K_3:
+                        grid[row][col] = 3
+                    elif event.key == pygame.K_4:
+                        grid[row][col] = 4
+                    elif event.key == pygame.K_5:
+                        grid[row][col] = 5
+                    elif event.key == pygame.K_6:
+                        grid[row][col] = 6
+                    elif event.key == pygame.K_7:
+                        grid[row][col] = 7
+                    elif event.key == pygame.K_8:
+                        grid[row][col] = 8
+                    elif event.key == pygame.K_9:
+                        grid[row][col] = 9
+                    elif event.key == pygame.K_BACKSPACE:
+                        grid[row][col] = 0
+                    elif event.key == pygame.K_RETURN:
+                        if grid == solution:
+                            print("Congratulations! You've solved the Sudoku!")
+                            running = False
 
-        pygame.display.flip()
-        clock.tick(30)
+        pygame.display.update()
+        clock.tick(60)
 
+if __name__ == "__main__":
+    main()
     pygame.quit()
-
-main()
